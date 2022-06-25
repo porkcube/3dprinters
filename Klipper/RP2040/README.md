@@ -8,6 +8,9 @@ My Klipper configs for RP2040 boards using an Adafruit and "generic" ADXL345.  H
 - `adxl-qt.cfg`
    - [Adafruit QT Py RP2040](https://www.adafruit.com/product/4900) via software SPI
        - Used with [Arceli ADXL345](https://www.amazon.com/dp/B07DMZCGP9)
+- `adxl-waveshare.cfg`
+    - [Waveshare RP2040](https://www.amazon.com/dp/B09PBCT559)
+       - Used with [Arceli ADXL345](https://www.amazon.com/dp/B07DMZCGP9)
 - `adxl-xiao.cfg`
    - [Seeedstudio Xiao](https://www.seeedstudio.com/XIAO-RP2040-v1-0-p-5026.html) via software SPI
       - Used with [Arceli ADXL345](https://www.amazon.com/dp/B07DMZCGP9)
