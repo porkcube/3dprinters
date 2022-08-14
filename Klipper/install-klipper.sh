@@ -6,7 +6,7 @@ sudo apt install -y git dfu-util unzip
 
 python3 --version	# 3.7 min
 
-sudo apt install -y virtualenv python-dev libffi-dev build-essential libncurses-dev libusb-dev avrdude gcc-avr binutils-avr avr-libc stm32flash dfu-util libnewlib-arm-none-eabi gcc-arm-none-eabi binutils-arm-none-eabi libusb-1.0-0
+sudo apt install -y virtualenv python-dev libffi-dev build-essential libncurses-dev libusb-dev avrdude gcc-avr binutils-avr avr-libc stm32flash dfu-util libnewlib-arm-none-eabi gcc-arm-none-eabi binutils-arm-none-eabi libusb-1.0-0 pkg-config libusb-1.0-0-dev
 
 cd ~
 git clone https://github.com/KevinOConnor/klipper
@@ -442,7 +442,6 @@ sudo chmod 755 /etc/init.d/klipper_mcu
 sudo systemctl enable klipper_mcu
 sudo systemctl start klipper_mcu
 
-# work-around for armbian/nanopi-neo issue
 sudo tee -a /etc/network/interfaces << ETH0
 
 auto eth0
