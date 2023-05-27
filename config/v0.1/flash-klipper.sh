@@ -7,16 +7,16 @@
 # it will also create ~/firmwares/ dir to archive compiled firmwares
 
 # update to match your main board
-CANuuid="705e06a96060"
 mainBoard="btt-skr-mini-e3-v2"
 klipperVers=$( cat ~/klipper/out/compile_time_request.c | grep -Fi 'version:' | awk '{print $3}' | cut -c 2- )
 
 flashCAN() {
+    canuuid="705e06a96060"
     cd ~/klipper/
     cp .config-sht36v2 .config
     make clean
     make -j$(nproc)
-    python3 ~/klipper/lib/canboot/flash_can.py -v -u "${CANuuid}"
+    python3 ~/klipper/lib/canboot/flash_can.py -v -u "${canuuid}"
 }
 
 flashDisplay() {
@@ -100,7 +100,10 @@ prompt(){
    read -p "press enter to continue / ctrl-c to quit"
 }
 
-
+reset_display(){
+   echo "Resetting USB Display"
+   sudo usbreset stm32f042x6
+}
 
 if [ "${1}" == "can" ]; then
     klipper stop
@@ -142,4 +145,5 @@ else
     exit 0
 fi
 
+reset_display
 klipper start

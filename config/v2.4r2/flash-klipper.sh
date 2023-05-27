@@ -7,9 +7,10 @@
 # it will also create ~/firmwares/ dir to archive compiled firmwares
 
 ## UUID of CAN device
-CANuuid="9f944e51ea3a"
-mainAddress="usb-Klipper_stm32f446xx_37003B001950534841313020-if00"
+octopus_CANuuid="51798926ca0d"
+sb2040_CANuuid="9f944e51ea3a"
 klipperVers=$( cat ~/klipper/out/compile_time_request.c | grep -Fi 'version:' | awk '{print $3}' | cut -c 2- )
+#mainAddress="usb-Klipper_stm32f446xx_37003B001950534841313020-if00"
 
 flashHost(){
     promptText="proceed to compile for raspi host?"
@@ -17,21 +18,29 @@ flashHost(){
     cp .config-rpi .config
     make clean
     make -j$(nproc) flash
-    promptText="proceed to update raspi host?"
+#    promptText="proceed to update raspi host?"
 }
 
 flashMain(){
-    # match the name / revision of your main board
-    if [[ -z "$mainAddress" ]]; then
-	    mainAddress=$( ls /dev/serial/by-id/usb-Klipper_stm32f446xx* | cut -d / -f 5 )
-    fi
-    promptText="proceed to compile + flash ${mainAddress}?"
+#    # match the name / revision of your main board
+#    if [[ -z "$mainAddress" ]]; then
+#	mainAddress=$( ls /dev/serial/by-id/usb-Klipper_stm32f446xx* | cut -d / -f 5 )
+#    fi
+    promptText="proceed to compile + flash ${octopus_CANuuid}?"
     cd ~/klipper/
-    cp .config-octopus_v1.1 .config
+    cp .config-octopus_v1.1-canbusbridge .config
     make clean
-    promptText="proceed to flash /dev/serial/by-id/${mainAddress}"
-    make -j$(nproc) flash FLASH_DEVICE="/dev/serial/by-id/${mainAddress}"
-    #make -j$(nproc) flash FLASH_DEVICE=0483:df11
+    ~/CanBoot/scripts/flash_can.py -r -u "${octopus_CANuuid}"
+    i="1"
+    printf 'Waiting for octopus to enter USB DFU mode.'
+    while [ $i -le 5 ]; do
+        printf '.'
+        sleep 1;
+        ((i+=1));
+    done
+    printf '\n'
+    #make -j$(nproc) flash FLASH_DEVICE="/dev/serial/by-id/${mainAddress}"
+    make -j$(nproc) flash FLASH_DEVICE=0483:df11
 }
 
 flashPico(){
@@ -60,7 +69,9 @@ flashSB2040(){
     cp .config-flysb2040 .config
     make clean
     make -j$(nproc)
-    python3 ~/klipper/lib/canboot/flash_can.py -i can0 -f ~/klipper/out/klipper.bin -u "${CANuuid}"
+    ## python3 lib/canboot/flash_can.py -u 9f944e51ea3a
+    python3 ~/CanBoot/scripts/flash_can.py -i can0 -f ~/klipper/out/klipper.bin -u "${sb2040_CANuuid}"
+    # python3 ~/klipper/lib/canboot/flash_can.py -i can0 -f ~/klipper/out/klipper.bin -u "${sb2040_CANuuid}"
 }
 
 klipper(){
@@ -68,7 +79,7 @@ klipper(){
 }
 
 prompt(){
-   echo "${promptText}"
+   echo "=========] ${promptText}"
    read -p "press enter to continue / ctrl-c to quit"
 }
 
@@ -88,6 +99,12 @@ elif [ "${1}" == "sb2040" ]; then
     klipper "stop"
     flashSB2040
     klipper "start"
+elif [ "${1}" == "most" ]; then
+    promptText="flash main and host?"
+    klipper "stop"
+    flashMain
+    flashHost
+    klipper "start"
 elif [ "${1}" == "all" ]; then
     promptText="flash main, sb2040 and host?"
     klipper "stop"
@@ -97,9 +114,10 @@ elif [ "${1}" == "all" ]; then
     klipper "start"
 else
     echo "usage:"
-    echo "    flash-klipper.sh main    | flash main board via sdcard"
+    echo "    flash-klipper.sh main    | flash main octopus via sdcard"
     echo "    flash-klipper.sh host    | flash raspi host"
     echo "    flash-klipper.sh pico    | flash raspi pico / rp2040"
-    echo "    flash-klipper.sh sb2040  | flash fly-sb2040 CAN board"
+    echo "    flash-klipper.sh sb2040  | flash raspi Fly SB2040"
+    echo "    flash-klipper.sh most    | flash all: octopus / host"
     echo "    flash-klipper.sh all     | flash all: main, fly-sb2040 and raspi host"
 fi
