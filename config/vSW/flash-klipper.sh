@@ -3,6 +3,8 @@
 canBoard="Fly SB2040"
 hostModel="$(grep -m1 Model /proc/cpuinfo | cut -d: -f 2- | sed 's/^ //')"
 mainBoard="btt-skr-mini-e3-v2"
+#serialPath="/dev/ttyACM0"
+serialPath="/dev/serial/by-id/usb-Klipper_stm32f103xe_31FFD6053031543914611343-if00"
 
 flashCAN() {
   canUuid="c8483db605ec"
@@ -22,7 +24,8 @@ flashMain() {
   make clean
   make -j$(nproc)
 #  make flash FLASH_DEVICE=/dev/ttyACM0
-  scripts/flash-sdcard.sh /dev/ttyACM0 "${mainBoard}"
+#  scripts/flash-sdcard.sh /dev/ttyACM0 "${mainBoard}"
+  scripts/flash-sdcard.sh "${serialPath}" "${mainBoard}"
 }
 
 flashHost() {

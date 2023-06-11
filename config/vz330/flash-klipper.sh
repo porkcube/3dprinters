@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
-devPath="/dev/ttyACM0"
-#devPath="/dev/serial/by-id/usb-Klipper_stm32h723xx_15002E001651313338343730-if00"
+#devPath="/dev/ttyACM0"
+devPath="/dev/serial/by-id/usb-Klipper_stm32h723xx_15002E001651313338343730-if00"
 mainBoard="super8pro"
 hostModel="$(grep -m1 Model /proc/cpuinfo | cut -d: -f 2- | sed 's/^ //')"
 klipperVers="$( cat ~/klipper/out/compile_time_request.c | grep -Fi 'version:' | awk '{print $3}' | cut -c 2- )"
@@ -22,8 +22,9 @@ flashMain(){
     cp .config-"${mainBoard}" .config
     make clean
     make -j$(nproc)
-    scripts/flash-sdcard.sh /dev/ttyACM0 "${mainBoard}"
-#    make flash FLASH_DEVICE="${devPath}"
+#    scripts/flash-sdcard.sh "${dev/Path}" #  "${mainBoard}"
+#    scripts/flash-sdcard.sh /dev/ttyACM0 "${mainBoard}"
+    make flash FLASH_DEVICE="${devPath}"
     dir="${mainBoard}"
     makeDirs
     cp out/klipper.bin "../firmwares/${mainBoard}/${klipperVers}/klipper.bin"

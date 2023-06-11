@@ -28,7 +28,7 @@ flashMain(){
 #    fi
     promptText="proceed to compile + flash ${octopus_CANuuid}?"
     cd ~/klipper/
-    cp .config-octopus_v1.1-canbusbridge .config
+    cp .config-octopus_v1.1 .config
     make clean
     ~/CanBoot/scripts/flash_can.py -r -u "${octopus_CANuuid}"
     i="1"
