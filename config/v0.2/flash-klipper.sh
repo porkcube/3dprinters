@@ -2,20 +2,31 @@
 
 mainBoard="btt-skr-pico"
 canBoard="SHT36"
+canInterface="can0"
+canSpeed="1000000"
 hostModel="$(grep -m1 Model /proc/cpuinfo | cut -d: -f 2- | sed 's/^ //')"
 klipperVers="$( cat ~/klipper/out/compile_time_request.c | grep -Fi 'version:' | awk '{print $3}' | cut -c 2- )"
 
 flashCAN() {
-    canuuid="41ffd913051f"
+    canUUID="41ffd913051f"
     promptText="proceed to compile + flash ${canBoard}?"
     prompt
     cd ~/klipper/
     cp .config-sht36 .config
     make clean
-    make -j$(nproc)
-    ## python3 ~/CanBoot/scripts/flash_can.py -r -u "${canuuid}"
-    python3 ~/CanBoot/scripts/flash_can.py -i can0 -f ~/klipper/out/klipper.bin -u "${canuuid}"
-    # python3 ~/klipper/lib/canboot/flash_can.py -v -u "${canuuid}"
+    make -j"$(nproc)"
+    python3 ~/CanBoot/scripts/flash_can.py \
+        -i "${canInterface}" \
+        -b "${canSpeed}" \
+        -r \
+        -u "${canUUID}"
+    python3 ~/CanBoot/scripts/flash_can.py \
+        -i "${canInterface}" \
+        -b "${canSpeed}" \
+        -f ~/klipper/out/klipper.bin \
+        -u "${canUUID}"
+    ### python3 ~/CanBoot/scripts/flash_can.py -r -u "${canUUID}"
+    # python3 ~/CanBoot/scripts/flash_can.py -i "${canInterface)" -f ~/klipper/out/klipper.bin -u "${canUUID}"
 }
 
 flashHost(){
@@ -24,18 +35,21 @@ flashHost(){
     cd ~/klipper/
     cp .config-rpi .config
     make clean
-    make -j$(nproc) flash
+    make -j"$(nproc)" flash
 }
 
 flashMain(){
-    canuuid="2e64f5de5b4f"
+    canUUID="2e64f5de5b4f"
     promptText="proceed to compile + flash ${mainBoard}?"
     prompt
     cd ~/klipper/
     cp .config-"${mainBoard}" .config
     make clean
-    make -j$(nproc)
-    python3 ~/CanBoot/scripts/flash_can.py -r -u "${canuuid}" -f ~/klipper/out/klipper.uf2
+    make -j"$(nproc)"
+#    python3 ~/CanBoot/scripts/flash_can.py -r -u "${canUUID}"
+    python3 ~/CanBoot/scripts/flash_can.py \
+	-f ~/klipper/out/klipper.uf2 \
+	-u "${canUUID}"
     sleep 5
     make flash FLASH_DEVICE=2e8a:0003
     ## fails cause make flash doesn't reset properly 8/

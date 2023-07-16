@@ -1,0 +1,18 @@
+# SETUP_KAMP_MESHING DISPLAY_PARAMETERS=1 VARIABLE_STATUS_MACRO=STATUS_MESHING MARGIN_ENABLE=1 MARGIN_SIZE=10 FUZZ_ENABLE=1
+# SETUP_LINE_PURGE DISPLAY_PARAMETERS=1 PURGE_HEIGHT=1.5 PURGE_AMOUNT=20 FLOW_RATE=12
+# SETUP_VORON_PURGE DISPLAY_PARAMETERS=1 ADAPTIVE_ENABLE=1 FLOW_RATE=12 X_DEFAULT=12 Y_DEFAULT=12
+
+## adaptive mesh
+################
+mesh_margin: 10
+fuzz_amount: 3
+# probe_dock_enable:
+# attach_macro:
+# detach_macro:
+
+## adaptive purge
+#################
+purge_height: 1.5
+tip_distance: 4
+purge_amount: 20
+flow_rate: 12

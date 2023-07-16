@@ -55,5 +55,5 @@ else
     echo "usage:"
     echo "    flash-klipper.sh main    | flash main board via sdcard"
     echo "    flash-klipper.sh host    | flash raspi host"
-    echo "    flash-klipper.sh all     | flash all: main, fly-sb2040 and raspi host"
+    echo "    flash-klipper.sh all     | flash all: main and raspi host"
 fi
