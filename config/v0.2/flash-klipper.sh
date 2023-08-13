@@ -6,6 +6,7 @@ canInterface="can0"
 canSpeed="1000000"
 hostModel="$(grep -m1 Model /proc/cpuinfo | cut -d: -f 2- | sed 's/^ //')"
 klipperVers="$( cat ~/klipper/out/compile_time_request.c | grep -Fi 'version:' | awk '{print $3}' | cut -c 2- )"
+startKlipper=0
 
 flashCAN() {
     canUUID="41ffd913051f"
@@ -15,18 +16,16 @@ flashCAN() {
     cp .config-sht36 .config
     make clean
     make -j"$(nproc)"
-    python3 ~/CanBoot/scripts/flash_can.py \
+    python3 ~/Katapult/scripts/flashtool.py \
         -i "${canInterface}" \
         -b "${canSpeed}" \
         -r \
         -u "${canUUID}"
-    python3 ~/CanBoot/scripts/flash_can.py \
+    python3 ~/Katapult/scripts/flashtool.py \
         -i "${canInterface}" \
         -b "${canSpeed}" \
         -f ~/klipper/out/klipper.bin \
         -u "${canUUID}"
-    ### python3 ~/CanBoot/scripts/flash_can.py -r -u "${canUUID}"
-    # python3 ~/CanBoot/scripts/flash_can.py -i "${canInterface)" -f ~/klipper/out/klipper.bin -u "${canUUID}"
 }
 
 flashHost(){
@@ -42,18 +41,21 @@ flashMain(){
     canUUID="2e64f5de5b4f"
     promptText="proceed to compile + flash ${mainBoard}?"
     prompt
+    devPath="$(ls /dev/serial/by-id/usb-katapult_rp2040_*)"
     cd ~/klipper/
     cp .config-"${mainBoard}" .config
     make clean
     make -j"$(nproc)"
-#    python3 ~/CanBoot/scripts/flash_can.py -r -u "${canUUID}"
-    python3 ~/CanBoot/scripts/flash_can.py \
-	-f ~/klipper/out/klipper.uf2 \
+    # reset klipper to katapult
+    python3 ~/Katapult/scripts/flashtool.py \
+        -r \
 	-u "${canUUID}"
     sleep 5
-    make flash FLASH_DEVICE=2e8a:0003
-    ## fails cause make flash doesn't reset properly 8/
-    #sudo usbreset 2e8a:0003
+    # reflash klipper via serial path
+    python3 ~/Katapult/scripts/flashtool.py \
+        -f ~/klipper/out/klipper.bin \
+        -d "${devPath}"
+    #make flash FLASH_DEVICE=2e8a:0003
     promptText="go press the reset button on ${mainBoard}"
     dir="${mainBoard}"
     makeDirs
@@ -79,21 +81,26 @@ prompt(){
 if [ "${1}" == "can" ]; then
     klipper stop
     flashCAN
+    startKlipper=1
 elif [ "${1}" == "host" ]; then
     klipper stop
     flashHost
+    startKlipper=1
 elif [ "${1}" == "main" ]; then
     klipper stop
     flashMain
+    startKlipper=1
 elif [ "${1}" == "most" ]; then
     klipper stop
     flashCAN
     flashHost
+    startKlipper=1
 elif [ "${1}" == "all" ]; then
     klipper stop
     flashCAN
     flashHost
     flashMain
+    startKlipper=1
 else
     echo "usage:"
     echo "    flash-klipper.sh can      | flash ${canBoard}"
@@ -104,4 +111,7 @@ else
     exit 0
 fi
 
-klipper start
+
+if [[ "${startKlipper}" == 1 ]]; then
+    klipper start
+fi

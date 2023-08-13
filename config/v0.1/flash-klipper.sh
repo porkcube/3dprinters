@@ -16,7 +16,9 @@ flashCAN() {
     cp .config-sht36v2 .config
     make clean
     make -j$(nproc)
-    python3 ~/klipper/lib/canboot/flash_can.py -v -u "${canuuid}"
+    python3 ~/Katapult/scripts/flashtool.py -r -u "${canuuid}"
+    make flash FLASH_DEVICE="$(ls /dev/serial/by-id/usb-katapult*)"
+#    python3 ~/klipper/lib/Katapult/flashtool.py -v -u "${canuuid}"
 }
 
 flashDisplay() {

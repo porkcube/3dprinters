@@ -16,10 +16,17 @@ while [ "${i}" -le "$((${#hosts[@]} - 1))" ]; do
           --delete \
           "${srcPath}/${printer}/flash-klipper.sh" \
           "${destPath}/${repo}/flash-klipper.sh"
+    if [[ ! -d "${srcPath}/${printer}/Katapult" ]]; then
+        if [[ -d "${srcPath}/${printer}/CanBoot" ]]; then
+            mv "${srcPath}/${printer}/CanBoot" "${srcPath}/${printer}/Katapult"        
+        else
+            mkdir -p "${srcPath}/${printer}/Katapult"
+        fi
+    fi
     rsync -avihzL \
           --delete \
-          "${srcPath}/${printer}/CanBoot/" \
-          "${destPath}/${repo}/CanBoot"
+          "${srcPath}/${printer}/Katapult/" \
+          "${destPath}/${repo}/Katapult"
     rsync -avihzL \
           --delete \
           "${srcPath}/${printer}/klipper/" \

@@ -6,5 +6,6 @@ repoName=("v2.4r2" "v0.1" "vSW" "v0.2" "nanopi-neo" "orangepi-zero2" "v-minion" 
 
 services=("klipper" "moonraker" "KlipperScreen")
 
-srcPath="/mnt/d/Box Sync/projects/3d printers/backups"
+#srcPath="/mnt/d/Box Sync/projects/3d printers/backups"
+srcPath="$HOME/src/backups"
 destPath="$HOME/src/3dprinters/config"

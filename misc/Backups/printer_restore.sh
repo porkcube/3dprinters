@@ -19,8 +19,8 @@ for host in "${hosts[@]}"; do
         scp -r "${srcPath}/${host}/flash-klipper.sh" "${host}":
     fi
 
-    if [[ -d "${srcPath}/${host}/CanBoot" ]]; then
-        scp -r /mnt/d/Box\ Sync/projects/3d\ printers/backups/"${host}"/CanBoot/.config-* "${host}":CanBoot/
+    if [[ -d "${srcPath}/${host}/Katapult" ]]; then
+        scp -r /mnt/d/Box\ Sync/projects/3d\ printers/backups/"${host}"/Katapult/.config-* "${host}":Katapult/
     fi
 
     if [[ -d "${srcPath}/${host}/klipper" ]]; then

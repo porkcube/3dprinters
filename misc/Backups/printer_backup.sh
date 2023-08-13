@@ -20,8 +20,8 @@ for host in "${hosts[@]}"; do
     mkdir -p "${srcPath}/${host}"
     scp -r "${host}":flash-klipper.sh "${srcPath}/${host}"
 
-    mkdir -p "${srcPath}/${host}/CanBoot"
-    scp -r "${host}":CanBoot/.config-* "${srcPath}/${host}/CanBoot"
+    mkdir -p "${srcPath}/${host}/Katapult"
+    scp -r "${host}":Katapult/.config-* "${srcPath}/${host}/Katapult"
 
     mkdir -p "${srcPath}/${host}/klipper"
     scp -r "${host}":klipper/.config-* "${srcPath}/${host}/klipper"

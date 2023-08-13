@@ -11,6 +11,7 @@ octopus_CANuuid="51798926ca0d"
 sb2040_CANuuid="9f944e51ea3a"
 klipperVers=$( cat ~/klipper/out/compile_time_request.c | grep -Fi 'version:' | awk '{print $3}' | cut -c 2- )
 #mainAddress="usb-Klipper_stm32f446xx_37003B001950534841313020-if00"
+startKlipper=0
 
 flashHost(){
     promptText="proceed to compile for raspi host?"
@@ -18,7 +19,6 @@ flashHost(){
     cp .config-rpi .config
     make clean
     make -j$(nproc) flash
-#    promptText="proceed to update raspi host?"
 }
 
 flashMain(){
@@ -30,10 +30,12 @@ flashMain(){
     cd ~/klipper/
     cp .config-octopus_v1.1 .config
     make clean
-    ~/CanBoot/scripts/flash_can.py -r -u "${octopus_CANuuid}"
-    i="1"
+    ~/Katapult/scripts/flashtool.py \
+        -r \
+        -u "${octopus_CANuuid}"
     printf 'Waiting for octopus to enter USB DFU mode.'
-    while [ $i -le 5 ]; do
+    i="1"
+    while [ "${i}" -le 5 ]; do
         printf '.'
         sleep 1;
         ((i+=1));
@@ -69,9 +71,13 @@ flashSB2040(){
     cp .config-flysb2040 .config
     make clean
     make -j$(nproc)
-    ## python3 lib/canboot/flash_can.py -u 9f944e51ea3a
-    python3 ~/CanBoot/scripts/flash_can.py -i can0 -f ~/klipper/out/klipper.bin -u "${sb2040_CANuuid}"
-    # python3 ~/klipper/lib/canboot/flash_can.py -i can0 -f ~/klipper/out/klipper.bin -u "${sb2040_CANuuid}"
+    python3 ~/Katapult/scripts/flashtool.py \
+        -r \
+        -u "${sb2040_CANuuid}"
+    python3 ~/Katapult/scripts/flashtool.py \
+        -i can0 \
+        -f ~/klipper/out/klipper.bin \
+        -u "${sb2040_CANuuid}"
 }
 
 klipper(){
@@ -86,32 +92,32 @@ prompt(){
 if [ "${1}" == "main" ]; then
     klipper "stop"
     flashMain
-    klipper "start"
+    startKlipper=1
 elif [ "${1}" == "host" ]; then
     klipper "stop"
     flashHost
-    klipper "start"
+    startKlipper=1
 elif [ "${1}" == "pico" ]; then
     klipper "stop"
     flashPico
-    klipper "start"
+    startKlipper=1
 elif [ "${1}" == "sb2040" ]; then
     klipper "stop"
     flashSB2040
-    klipper "start"
+    startKlipper=1
 elif [ "${1}" == "most" ]; then
     promptText="flash main and host?"
     klipper "stop"
     flashMain
     flashHost
-    klipper "start"
+    startKlipper=1
 elif [ "${1}" == "all" ]; then
     promptText="flash main, sb2040 and host?"
     klipper "stop"
     flashMain
     flashHost
     flashSB2040
-    klipper "start"
+    startKlipper=1
 else
     echo "usage:"
     echo "    flash-klipper.sh main    | flash main octopus via sdcard"
@@ -120,4 +126,8 @@ else
     echo "    flash-klipper.sh sb2040  | flash raspi Fly SB2040"
     echo "    flash-klipper.sh most    | flash all: octopus / host"
     echo "    flash-klipper.sh all     | flash all: main, fly-sb2040 and raspi host"
+fi
+
+if [[ "${startKlipper}" == 1 ]]; then
+    klipper "start"
 fi
