@@ -46,6 +46,7 @@ flashMain(){
     cp .config-"${mainBoard}" .config
     make clean
     make -j"$(nproc)"
+    sleep 5
     # reset klipper to katapult
     python3 ~/Katapult/scripts/flashtool.py \
         -r \
