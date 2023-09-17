@@ -41,26 +41,35 @@ flashMain(){
     canUUID="2e64f5de5b4f"
     promptText="proceed to compile + flash ${mainBoard}?"
     prompt
-    devPath="$(ls /dev/serial/by-id/usb-katapult_rp2040_*)"
+    #devPath="$(ls /dev/serial/by-id/usb-katapult_rp2040_*)"
     cd ~/klipper/
     cp .config-"${mainBoard}" .config
     make clean
     make -j"$(nproc)"
-    sleep 5
     # reset klipper to katapult
     python3 ~/Katapult/scripts/flashtool.py \
         -r \
 	-u "${canUUID}"
-    sleep 5
+#    sleep 5
+
+    printf 'Waiting for ${mainBoard} to enter USB DFU mode.'
+    i="1"
+    while [ "${i}" -le 5 ]; do
+        printf '.'
+        sleep 1;
+        ((i+=1));
+    done
+
     # reflash klipper via serial path
     python3 ~/Katapult/scripts/flashtool.py \
         -f ~/klipper/out/klipper.bin \
-        -d "${devPath}"
+        -d "$(ls /dev/serial/by-id/usb-katapult_rp2040_*)"
+#        -d "${devPath}"
     #make flash FLASH_DEVICE=2e8a:0003
     promptText="go press the reset button on ${mainBoard}"
     dir="${mainBoard}"
     makeDirs
-    cp out/klipper.uf2 "../firmwares/${mainBoard}/${klipperVers}/klipper.bin"
+    cp out/klipper.bin "../firmwares/${mainBoard}/${klipperVers}/klipper.bin"
 }
 
 klipper(){
