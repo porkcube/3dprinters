@@ -17,7 +17,8 @@ flashCAN() {
     make clean
     make -j$(nproc)
     python3 ~/Katapult/scripts/flashtool.py -r -u "${canuuid}"
-    make flash FLASH_DEVICE="$(ls /dev/serial/by-id/usb-katapult*)"
+#    make flash FLASH_DEVICE="$(ls /dev/serial/by-id/usb-katapult*)"
+    python3 ~/Katapult/scripts/flashtool.py -v -u "${canuuid}"
 #    python3 ~/klipper/lib/Katapult/flashtool.py -v -u "${canuuid}"
 }
 
