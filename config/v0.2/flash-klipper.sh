@@ -84,7 +84,7 @@ makeDirs() {
 
 prompt(){
    echo "=========] ${promptText}"
-   read -p "press enter to continue / ctrl-c to quit"
+   #read -p "press enter to continue / ctrl-c to quit"
 }
 
 
