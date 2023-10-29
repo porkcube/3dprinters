@@ -1,16 +1,19 @@
 #!/usr/bin/env bash
 
-canBoard="Fly SB2040"
+canBoard="Fly SB2040v2"
+#canBoard="Fly SB2040"
 hostModel="$(grep -m1 Model /proc/cpuinfo | cut -d: -f 2- | sed 's/^ //')"
 mainBoard="btt-skr-mini-e3-v2"
 #serialPath="/dev/ttyACM0"
 serialPath="/dev/serial/by-id/usb-Klipper_stm32f103xe_31FFD6053031543914611343-if00"
 
 flashCAN() {
-  canUuid="c8483db605ec"
+  canUuid="284e84c01aa8"
+#  canUuid="c8483db605ec"
   cd ~/klipper
   make distclean
-  cp .config-flysb2040 .config
+  cp .config-flysb2040v2 .config
+#  cp .config-flysb2040 .config
   make clean
   make -j$(nproc)
 #  python3 ~/CanBoot/scripts/flash_can.py -r -u "${canUuid}"
