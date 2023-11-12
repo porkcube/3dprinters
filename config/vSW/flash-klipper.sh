@@ -56,7 +56,7 @@ elif [ "${1}" == "main" ]; then
     flashMain
 elif [ "${1}" == "all" ]; then
     klipper stop
-    flashCAN
+#    flashCAN
     flashHost
     flashMain
 else
