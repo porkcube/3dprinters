@@ -9,16 +9,20 @@ fi
 
 for host in "${hosts[@]}"; do
     for service in "${services[@]}"; do
-        if [[ -f "/etc/systemd/system/${service}.service" ]]; then
+        # if [[ -f "/etc/systemd/system/${service}.service" ]]; then
             echo "=========] stopping ${service} on ${host}"
             ssh "${host}" -- "sudo service ${service} stop"
-        fi
+        # fi
     done
 
     echo "=========] backing up ${host}"
 
     mkdir -p "${srcPath}/${host}"
     scp -r "${host}":flash-klipper.sh "${srcPath}/${host}"
+
+    mkdir -p "${srcPath}/${host}/boot"
+    scp "${host}":/boot/cmdline.txt "${srcPath}/${host}/boot/cmdline.txt"
+    scp "${host}":/boot/config.txt "${srcPath}/${host}/boot/config.txt"
 
     mkdir -p "${srcPath}/${host}/Katapult"
     scp -r "${host}":Katapult/.config-* "${srcPath}/${host}/Katapult"
@@ -41,10 +45,10 @@ for host in "${hosts[@]}"; do
           "${srcPath}/${host}/printer_data"
 
     for service in "${services[@]}"; do
-        if [[ -f "/etc/systemd/system/${service}.service" ]]; then
+        # if [[ -f "/etc/systemd/system/${service}.service" ]]; then
             echo "=========] starting ${service} on ${host}"
             ssh "${host}" -- "sudo service ${service} start"
-        fi
+        # fi
     done
 
     echo "=========] backup completed for ${host}"

@@ -19,6 +19,13 @@ for host in "${hosts[@]}"; do
         scp -r "${srcPath}/${host}/flash-klipper.sh" "${host}":
     fi
 
+    if [[ -d "${srcPath}/${host}/boot" ]]; then 
+        scp "${srcPath}/${host}/boot/cmdline.txt" "${host}":
+        ssh "${host}" -- "sudo cp /boot/cmdline.txt /boot/cmdline.txt- && sudo mv cmdline.txt /boot/cmdline.txt"
+        scp "${srcPath}/${host}/boot/config.txt" "${host}":
+        ssh "${host}" -- "sudo cp /boot/config.txt /boot/config.txt- && sudo mv config.txt /boot/config.txt"
+    fi
+
     if [[ -d "${srcPath}/${host}/Katapult" ]]; then
         scp -r /mnt/d/Box\ Sync/projects/3d\ printers/backups/"${host}"/Katapult/.config-* "${host}":Katapult/
     fi

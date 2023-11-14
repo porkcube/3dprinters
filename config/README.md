@@ -10,3 +10,4 @@
 - non-printers / utility:
     - NanoPi-Neo `nanopi-neo`
     - OrangePi-Zero2 `orangepi-zero2`
+    - raspi0w2 `raspi0w2`
