@@ -52,7 +52,7 @@ flashMain(){
 	-u "${canUUID}"
 #    sleep 5
 
-    printf 'Waiting for ${mainBoard} to enter USB DFU mode.'
+    printf 'Waiting for \${mainBoard} to enter USB DFU mode.'
     i="1"
     while [ "${i}" -le 5 ]; do
         printf '.'

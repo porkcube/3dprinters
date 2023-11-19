@@ -1,0 +1,1 @@
+console=tty1 root=PARTUUID=480b5767-02 rootfstype=ext4 fsck.repair=yes rootwait logo.nologo video=HDMI-A-1:400x1280M@60e fbcon=rotate:3

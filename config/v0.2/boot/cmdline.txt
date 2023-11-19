@@ -1,0 +1,1 @@
+video=DSI-1:480x640e,rotate=90 console=tty1 root=PARTUUID=878e97a7-02 rootfstype=ext4 fsck.repair=yes rootwait logo.nologo
