@@ -52,13 +52,14 @@ flashMain(){
 	-u "${canUUID}"
 #    sleep 5
 
-    printf 'Waiting for \${mainBoard} to enter USB DFU mode.'
+    printf 'Waiting for %s to enter USB DFU mode.' "${mainBoard}"
     i="1"
     while [ "${i}" -le 5 ]; do
         printf '.'
         sleep 1;
         ((i+=1));
     done
+    printf '\n'
 
     # reflash klipper via serial path
     python3 ~/Katapult/scripts/flashtool.py \
