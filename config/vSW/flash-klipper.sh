@@ -13,12 +13,10 @@ flashCAN() {
   cd ~/klipper
   make distclean
   cp .config-flysb2040v2 .config
-#  cp .config-flysb2040 .config
   make clean
   make -j$(nproc)
 #  python3 ~/CanBoot/scripts/flash_can.py -r -u "${canUuid}"
   python3 ~/Katapult/scripts/flashtool.py -i can0 -f ~/klipper/out/klipper.bin -u "${canUuid}"
-#  python3 ~/CanBoot/scripts/flash_can.py -i can0 -f ~/klipper/out/klipper.bin -u "${canUuid}"
 }
 
 flashMain() {
