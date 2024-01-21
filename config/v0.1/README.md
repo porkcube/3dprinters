@@ -3,8 +3,9 @@
 ![Voron v0.1](printer.jpg)
 
 - mods:
+    - chirpy's [Dragon Burner](https://github.com/chirpy2605/voron/tree/main/V0/Dragon_Burner)
     - Mellow UTOC-1
-    - Mellow SHT36
+    - Mellow SHT36v2
     - Sensorless X
     - Kirigami bed
     - WAGO mounts
