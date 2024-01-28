@@ -15,7 +15,7 @@ flashMain(){
     make clean
     make -j$(nproc)
     make flash FLASH_DEVICE=/dev/serial/by-id/usb-Klipper_rp2040_45503571288F3508-if00
-#    make flash FLASH_DEVICE=2e8a:0003
+    make flash FLASH_DEVICE=2e8a:0003 # above seems to enter bootloader mode
 #    if [ -e /dev/sda1 ]; then
 #        sudo mount /dev/sda1 /mnt
 #    fi

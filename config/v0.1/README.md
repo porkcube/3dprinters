@@ -11,7 +11,6 @@
     - WAGO mounts
     - Bed screw "tabs"
     - Zerofilter (x2)
-    - MiniAB cowl w/integrated Klicky probe mount
     - Klicky probe
     - 2x24v LED strip (x2)
     - Hex rear panel
@@ -25,3 +24,5 @@
     - Deck collar
     - PSU + Ethernet extension skirt
     - Modesty skirts
+    - Oseq bedplate
+
