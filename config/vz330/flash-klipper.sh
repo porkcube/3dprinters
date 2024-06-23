@@ -30,6 +30,12 @@ flashMain(){
     cp out/klipper.bin "../firmwares/${mainBoard}/${klipperVers}/klipper.bin"
 }
 
+
+flashBeacon(){
+    cd ~/beacon_klipper
+    ./update_firmware.py update $(ls /dev/serial/by-id/usb-Beacon*)
+}
+
 klipper(){
     sudo service klipper "${1}"
 }
@@ -52,15 +58,20 @@ if [ "${1}" == "host" ]; then
 elif [ "${1}" == "main" ]; then
     klipper stop
     flashMain
+elif [ "${1}" == "beacon" ]; then
+    klipper stop
+    flashBeacon
 elif [ "${1}" == "all" ]; then
     klipper stop
     flashHost
     flashMain
+    flashBeacon
 else
     echo "usage:"
     echo "    flash-klipper.sh host     | flash ${hostModel}"
     echo "    flash-klipper.sh main     | flash ${mainBoard}"
-    echo "    flash-klipper.sh all      | flash all: ${hostModel} + ${mainBoard}"
+    echo "    flash-klipper.sh beacon   | flash Beacon"
+    echo "    flash-klipper.sh all      | flash all: ${hostModel} + ${mainBoard} + Beacon"
     exit 0
 fi
 
