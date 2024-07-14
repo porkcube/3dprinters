@@ -68,7 +68,7 @@ flashPico(){
 flashSB2040(){
     promptText="proceed to compile for fly sb2040 and flash via CAN?"
     cd ~/klipper
-    cp .config-flysb2040 .config
+    cp .config-sb2040 .config
     make clean
     make -j$(nproc)
     python3 ~/Katapult/scripts/flashtool.py \
