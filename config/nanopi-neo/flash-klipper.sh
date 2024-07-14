@@ -11,7 +11,7 @@ klipperVers=$( cat ~/klipper/out/compile_time_request.c | grep -Fi 'version:' | 
 flashHost(){
     promptText="proceed to compile for raspi host?"
     cd ~/klipper/
-    cp .config-rpi .config
+    cp .config-opi .config
     make clean
     make -j$(nproc) flash
 }
