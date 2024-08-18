@@ -1,7 +1,6 @@
 [server]
 host: 0.0.0.0
 port: 7125
-klippy_uds_address: /home/pi/printer_data/comms/klippy.sock
 
 [file_manager]
 enable_object_processing: True
@@ -66,14 +65,6 @@ origin: https://github.com/jordanruthe/KlipperScreen.git
 env: ~/.KlipperScreen-env/bin/python
 requirements: scripts/KlipperScreen-requirements.txt
 install_script: scripts/KlipperScreen-install.sh
-
-# Crowsnest update_manager entry
-[update_manager crowsnest]
-type: git_repo
-path: ~/crowsnest
-origin: https://github.com/mainsail-crew/crowsnest.git
-managed_services: crowsnest
-install_script: tools/pkglist.sh
 
 ## moonraker-timelapse plugin bits:
 [timelapse]
