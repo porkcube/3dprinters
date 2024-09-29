@@ -25,6 +25,9 @@ flashMain(){
 #    scripts/flash-sdcard.sh "${dev/Path}" #  "${mainBoard}"
 #    scripts/flash-sdcard.sh /dev/ttyACM0 "${mainBoard}"
     make flash FLASH_DEVICE="${devPath}"
+    # something funky here
+    sleep 5
+    make flash FLASH_DEVICE=0483:df11
     dir="${mainBoard}"
     makeDirs
     cp out/klipper.bin "../firmwares/${mainBoard}/${klipperVers}/klipper.bin"
