@@ -25,8 +25,8 @@ flashMain() {
   cp ".config-${mainBoard}" .config
   make clean
   make -j$(nproc)
-  make flash FLASH_DEVICE="${serialPath}"
-#  make serialflash FLASH_DEVICE="${serialPath}"
+#  make flash FLASH_DEVICE="${serialPath}"
+  make serialflash FLASH_DEVICE="${serialPath}"
 #  scripts/flash-sdcard.sh /dev/ttyACM0 "${mainBoard}"
 #  scripts/flash-sdcard.sh "${serialPath}" "${mainBoard}"
 }
