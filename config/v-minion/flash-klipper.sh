@@ -3,7 +3,7 @@
 flashHost(){
     promptText="proceed to compile for raspi host?"
     cd ~/klipper/
-    cp .config-rpi .config
+    cp .config-opi .config
     make clean
     make -j$(nproc) flash
 }
@@ -14,7 +14,8 @@ flashMain(){
     cp .config-skr-pico .config
     make clean
     make -j$(nproc)
-    make flash FLASH_DEVICE=/dev/serial/by-id/usb-Klipper_rp2040_45503571288F3508-if00
+    make flash FLASH_DEVICE=/dev/serial/by-id/usb-Klipper_rp2040_45503571288CFB38-if00
+#    make flash FLASH_DEVICE=/dev/serial/by-id/usb-Klipper_rp2040_45503571288F3508-if00
     sleep 5;
     make flash FLASH_DEVICE=2e8a:0003 # above seems to enter bootloader mode
 #    if [ -e /dev/sda1 ]; then
